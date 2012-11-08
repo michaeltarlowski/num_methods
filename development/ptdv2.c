@@ -15,7 +15,8 @@ float poly_eval(float);
 float find_root(float, float);
 float *get_interval_init(float,float); //doubles as exhaustive enumeration method
 
-float coa[DEGREE_MAX] = {-2,0,1};  //represents the fn x^2 -4
+float coa[DEGREE_MAX] = {4,0,-1};  //represents the fn -x^2 + 4 //mon decrease test
+//float coa[DEGREE_MAX] = {-4,0,1};  //represents the fn x^2 - 4 //mon decrease test
 int order = 2; //both float and order are external so that the fn call can be f(x)
 
 float pt,guess_init_min,guess_init_max;
@@ -25,7 +26,7 @@ void main()
 {
   float fx,dx;
   int order = 2; 
-  dx=0.001;
+  dx=0.01;
   printf("The polynomial is: ");
   i=order;
   while (i-->=0){
@@ -70,13 +71,20 @@ float *get_interval_init(float xl_0, float dx)
   x=xl_0;
   printf("iter\t |x\t   |poly_eval(x)\n");
   
-  if (fx_0<0){ // Mon increasing casethis will be shifted to the while condition
+  if ((fx_0<0)&&(poly_eval(x+dx)>fx_0)){ // Mon increasing over local region
     while(poly_eval(x)<=0){
       x+=dx;
       printf("%7d  | %6.3f  | %6.3f\n",i,x,poly_eval(x));
       i++;
     } //end while
-  }
+  } //endif
+  else if ((fx_0>0)&&(poly_eval(x+dx)<fx_0)){ //Mon decreasing locally
+    while(poly_eval(x)>=0){
+      x+=dx;
+      printf("%7d  | %6.3f  | %6.3f\n",i,x,poly_eval(x));
+      i++;
+    } //end while
+  } //end else if  
   inta[0] = xl_0;
   inta[1] = x;
   dum = inta;
